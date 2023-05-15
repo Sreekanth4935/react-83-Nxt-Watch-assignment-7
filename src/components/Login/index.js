@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import Cookies from 'js-cookie'
 
 import {
   LoginFormContainer,
@@ -17,20 +18,62 @@ import {
 
 class Login extends Component {
   state = {
-    errorMessageFromApi: 'sdfasdf',
+    username: '',
+    password: '',
+    showSubmitError: false,
+    errorMsg: '',
     showPassword: false,
   }
 
-  componentDidMount() {
-    this.getApi()
+  onChangeUsername = event => {
+    this.setState({username: event.target.value})
   }
 
-  getApi = () => {}
+  onChangePassword = event => {
+    this.setState({
+      password: event.target.value,
+    })
+  }
+
+  submitForm = async event => {
+    event.preventDefault()
+    const {username, password} = this.state
+    const userDetails = {username, password}
+    const apiUrl = 'https://apis.ccbp.in/login'
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(userDetails),
+    }
+
+    const response = await fetch(apiUrl, options)
+    const data = await response.json()
+    if (response.ok === true) {
+      this.onSubmitSuccess(data.jwt_token)
+    } else {
+      this.onSubmitFailure(data.error_msg)
+    }
+  }
+
+  onSubmitSuccess = jwtToken => {
+    Cookies.set('jwt_token', jwtToken, {expires: 30})
+    // console.log(Cookies.get('jwt_token'))
+    // console.log(this.props)
+    const {history} = this.props
+    history.replace('/')
+  }
+
+  onSubmitFailure = errorMsg => {
+    this.setState({showSubmitError: true, errorMsg})
+  }
 
   renderUsername = () => (
     <LabelForUsername>
       USERNAME
-      <InputUsername type="text" placeholder="Username" />
+      <InputUsername
+        onChange={this.onChangeUsername}
+        type="text"
+        placeholder="Username"
+      />
     </LabelForUsername>
   )
 
@@ -40,6 +83,7 @@ class Login extends Component {
       <LabelForPassword>
         PASSWORD
         <InputUsername
+          onChange={this.onChangePassword}
           type={showPassword ? 'text' : 'password'}
           onClick={this.toggleShowPassword}
           placeholder="Password"
@@ -62,7 +106,7 @@ class Login extends Component {
   )
 
   render() {
-    const {errorMessageFromApi} = this.state
+    const {errorMsg, showSubmitError} = this.state
 
     return (
       <LoginFormContainer>
@@ -73,15 +117,15 @@ class Login extends Component {
               alt="logo"
             />
           </ImageContainer>
-          <form>
+          <form onSubmit={this.submitForm}>
             {this.renderUsername()}
             {this.renderPassword()}
             {this.renderShowPassword()}
             <ButtonContainer>
-              <LoginButton>Login</LoginButton>
+              <LoginButton type="submit">Login</LoginButton>
             </ButtonContainer>
           </form>
-          <ErrorMessage>{errorMessageFromApi}</ErrorMessage>
+          <ErrorMessage>{showSubmitError ? `*${errorMsg}` : ''}</ErrorMessage>
         </LoginContainer>
       </LoginFormContainer>
     )
