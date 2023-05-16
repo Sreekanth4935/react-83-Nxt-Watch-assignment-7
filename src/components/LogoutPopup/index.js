@@ -28,7 +28,6 @@ const LogoutPopup = props => (
       const clearCookies = () => {
         Cookies.remove('jwt_token')
         const {history} = props
-
         history.replace('/')
       }
 
