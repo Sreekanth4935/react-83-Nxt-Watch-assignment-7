@@ -1,61 +1,34 @@
 import {Component} from 'react'
+import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 import Styled from 'styled-components'
-import {IoIosClose} from 'react-icons/io'
-import {AiOutlineSearch, AiFillHome} from 'react-icons/ai'
-import {RiHomeLine, RiGameLine, RiSaveLine} from 'react-icons/ri'
+
+import {AiOutlineSearch} from 'react-icons/ai'
+
 import ThemeContext from '../../context/ThemeContext'
 import Header from '../Header'
-import DisplayButtons from '../DisplayButtons'
-
+import Sidebar from '../Sidebar'
+import Banner from '../Banner'
 import {
   HomeContainer,
-  SidebarContainer,
   HomeMainContainer,
-  BannerImage,
-  WebsiteLogo,
-  BannerDescription,
-  GetButton,
-  CloseButtonContainer,
   VideosContainer,
   SearchContainer,
   InputSearch,
-  ContactHeading,
-  IconsContainer,
-  BottomAddress,
-  ImageSocialMedia,
-  AboutPara,
 } from './styledComponents'
 
-const buttons = [
-  {
-    id: 'Home',
-    icon: <RiHomeLine size={18} />,
-    route: '/home',
-  },
-  {
-    id: 'Trending',
-    icon: <AiFillHome size={18} />,
-    route: '/trending',
-  },
-
-  {
-    id: 'Gaming',
-    icon: <RiGameLine size={18} />,
-    route: '/gaming',
-  },
-  {
-    id: 'Saved Videos',
-    icon: <RiSaveLine size={18} />,
-    route: '/saved-videos',
-  },
-]
+const apiStatusConstants = {
+  initial: 'INITIAL',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+  inProgress: 'IN_PROGRESS',
+}
 
 class Home extends Component {
   state = {
-    showBanner: true,
     inputSearchText: '',
-    activeButton: buttons[0].id,
+    apiStatus: apiStatusConstants.initial,
+    homeVideosData: [],
   }
 
   componentDidMount() {
@@ -63,6 +36,9 @@ class Home extends Component {
   }
 
   getVideosApi = async () => {
+    this.setState({
+      apiStatus: apiStatusConstants.inProgress,
+    })
     const jwtToken = Cookies.get('jwt_token')
     const {inputSearchText} = this.state
     const apiUrl = `https://apis.ccbp.in/videos/all?search=${inputSearchText}`
@@ -74,18 +50,49 @@ class Home extends Component {
     }
     const response = await fetch(apiUrl, options)
     const data = await response.json()
-    const videosData = data.videos.map(eachVideo => ({
-      id: eachVideo.id,
-      title: eachVideo.title,
-      thumbnailUrl: eachVideo.thumbnail_url,
-      channel: {
-        name: eachVideo.channel.name,
-        profileImageUrl: eachVideo.channel.profile_image_url,
-      },
-      viewCount: eachVideo.view_count,
-      publishedAt: eachVideo.published_at,
-    }))
-    console.log(videosData)
+
+    if (response.ok) {
+      const videosData = data.videos.map(eachVideo => ({
+        id: eachVideo.id,
+        title: eachVideo.title,
+        thumbnailUrl: eachVideo.thumbnail_url,
+        channel: {
+          name: eachVideo.channel.name,
+          profileImageUrl: eachVideo.channel.profile_image_url,
+        },
+        viewCount: eachVideo.view_count,
+        publishedAt: eachVideo.published_at,
+      }))
+      this.setState({
+        homeVideosData: videosData,
+      })
+    } else {
+      this.setState({
+        apiStatus: apiStatusConstants.failure,
+      })
+    }
+  }
+
+  renderLoader = () => (
+    <div>
+      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
+    </div>
+  )
+
+  renderHomeVideos = () => {
+    const {apiStatus} = this.state
+    console.log(apiStatus)
+
+    switch ('IN_PROGRESS') {
+      case apiStatusConstants.inProgress:
+        return this.renderLoader()
+      case apiStatusConstants.success:
+        return this.renderSuccessView()
+      case apiStatusConstants.failure:
+        return this.renderFailureView()
+      default:
+        return null
+    }
   }
 
   onChangeInput = event => {
@@ -94,13 +101,7 @@ class Home extends Component {
     })
   }
 
-  handleCloseBanner = () => {
-    this.setState({
-      showBanner: false,
-    })
-  }
-
-  renderVideos = () => {
+  renderSearchedVideos = () => {
     const SearchIconAdjust = Styled(AiOutlineSearch)`
     width:50px;`
 
@@ -114,13 +115,7 @@ class Home extends Component {
     )
   }
 
-  changeActiveButton = id => {
-    this.setState({activeButton: id})
-  }
-
   render() {
-    const {showBanner, activeButton} = this.state
-
     return (
       <ThemeContext.Consumer>
         {value => {
@@ -130,60 +125,10 @@ class Home extends Component {
             <>
               <Header />
               <HomeContainer>
-                <SidebarContainer>
-                  <div>
-                    {buttons.map(eachButton => (
-                      <DisplayButtons
-                        eachButton={eachButton}
-                        key={eachButton.id}
-                        isActive={eachButton.id === activeButton}
-                        changeActiveButton={this.changeActiveButton}
-                      />
-                    ))}
-                  </div>
-                  <BottomAddress>
-                    <ContactHeading>CONTACT US</ContactHeading>
-                    <IconsContainer>
-                      <ImageSocialMedia
-                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-facebook-logo-img.png"
-                        alt="facebook logo"
-                      />
-                      <ImageSocialMedia
-                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-twitter-logo-img.png"
-                        alt="twitter logo"
-                      />
-                      <ImageSocialMedia
-                        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
-                        alt="linked in logo"
-                      />
-                    </IconsContainer>
-                    <AboutPara>
-                      Enjoy!Now to see your channels and recommendations!
-                    </AboutPara>
-                  </BottomAddress>
-                </SidebarContainer>
-
                 <HomeMainContainer>
-                  {showBanner && (
-                    <BannerImage>
-                      <CloseButtonContainer>
-                        <WebsiteLogo
-                          src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
-                          alt="website logo"
-                        />
-                        <IoIosClose
-                          onClick={this.handleCloseBanner}
-                          size={30}
-                        />
-                      </CloseButtonContainer>
-                      <BannerDescription>
-                        But Nxt Watch Premium prepaid plans with UPI
-                      </BannerDescription>
-                      <GetButton type="button">GET IT NOW</GetButton>
-                    </BannerImage>
-                  )}
-                  <>{this.renderVideos()}</>
+                  <Sidebar />
                 </HomeMainContainer>
+                <Banner isDark={isDark} />
               </HomeContainer>
             </>
           )

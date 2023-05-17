@@ -4,8 +4,8 @@ export const HomeContainer = Styled.div`
 font-family:'Roboto';
 display:flex;
 flex-direction:row;
-
 justify-content:center;
+align-items:center;
 background-color:${props => (props.isDark ? '#000000' : '#ffffff')};
 `
 export const SidebarContainer = Styled.div`
@@ -59,9 +59,13 @@ border-radius:5px;
 export const VideosContainer = Styled.div`
 background-color: #ebebeb;
 min-height:100vh;
+background-size:cover;
 width:100%;
 padding-top:10px;
-border:Solid 1px red;
+overflow-y: scroll;
+
+// border:Solid 1px red;
+
 
 `
 export const SearchContainer = Styled.div`
