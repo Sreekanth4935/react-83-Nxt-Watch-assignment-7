@@ -4,9 +4,10 @@ export const HomeContainer = Styled.div`
 font-family:'Roboto';
 display:flex;
 flex-direction:row;
-justify-content:center;
-align-items:center;
+// justify-content:center;
+// align-items:center;
 background-color:${props => (props.isDark ? '#000000' : '#ffffff')};
+border:solid 2px red;
 `
 export const SidebarContainer = Styled.div`
 font-family:'Roboto';
@@ -24,7 +25,8 @@ max-width:500px;
 export const HomeMainContainer = Styled.div`
 display:flex;
 flex-direction:column;
-width:100%;
+// width:100%;
+
 `
 export const BannerImage = Styled.div`
 // width:100%;
@@ -58,14 +60,11 @@ border-radius:5px;
 `
 export const VideosContainer = Styled.div`
 background-color: #ebebeb;
-min-height:100vh;
+// min-height:100vh;
 background-size:cover;
 width:100%;
 padding-top:10px;
-overflow-y: scroll;
-
-// border:Solid 1px red;
-
+background-color:${props => (props.isDark ? '#000000' : '#ebebeb')};
 
 `
 export const SearchContainer = Styled.div`
@@ -111,4 +110,42 @@ padding:10px;
 export const AboutPara = Styled.p`
 font-family:'Roboto'
 font-weight:600;
+`
+
+export const BannerMainContainer = Styled.div`
+display:flex;
+flex-direction:row;
+width:100%;
+`
+
+export const BottomVideosContainer = Styled.div`
+  background-color: #ebebeb;
+  height: 100vh;
+  background-size: cover;
+  width: 100%;
+  padding-top: 10px;
+  overflow-y: scroll;
+  color : ${props => (props.isDark ? '#ffffff' : '#000000')};
+  background-color:${props => (props.isDark ? '#000000' : '#ebebeb')};
+ 
+`
+export const HomeVideosUlContainer = Styled.div`
+list-style-type :none;
+padding:10px;
+`
+export const LoaderContainer = Styled.div`
+min-height:50vh;
+display:flex;
+flex-direction:row;
+justify-content:center;
+align-items:center;
+`
+
+export const UlHomeVideos = Styled.ul`
+font-family:'Roboto';
+list-style-type:none;
+margin-left:0px;
+padding-left:10px;
+display: flex;
+flex-wrap: wrap;
 `

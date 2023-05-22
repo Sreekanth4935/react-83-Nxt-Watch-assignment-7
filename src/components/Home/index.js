@@ -2,8 +2,8 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 import Styled from 'styled-components'
-
 import {AiOutlineSearch} from 'react-icons/ai'
+import HomeRouter from '../HomeRouter'
 
 import ThemeContext from '../../context/ThemeContext'
 import Header from '../Header'
@@ -15,6 +15,9 @@ import {
   VideosContainer,
   SearchContainer,
   InputSearch,
+  BottomVideosContainer,
+  LoaderContainer,
+  UlHomeVideos,
 } from './styledComponents'
 
 const apiStatusConstants = {
@@ -64,6 +67,7 @@ class Home extends Component {
         publishedAt: eachVideo.published_at,
       }))
       this.setState({
+        apiStatus: apiStatusConstants.success,
         homeVideosData: videosData,
       })
     } else {
@@ -74,16 +78,33 @@ class Home extends Component {
   }
 
   renderLoader = () => (
-    <div>
+    <LoaderContainer data-testid="loader">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
-    </div>
+    </LoaderContainer>
+  )
+
+  renderSuccessView = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDark} = value
+        const {homeVideosData} = this.state
+        console.log(homeVideosData)
+        return (
+          <UlHomeVideos isDark={isDark}>
+            {homeVideosData.map(eachData => (
+              <HomeRouter eachData={eachData} key={eachData.id} />
+            ))}
+          </UlHomeVideos>
+        )
+      }}
+    </ThemeContext.Consumer>
   )
 
   renderHomeVideos = () => {
     const {apiStatus} = this.state
     console.log(apiStatus)
 
-    switch ('IN_PROGRESS') {
+    switch ('SUCCESS') {
       case apiStatusConstants.inProgress:
         return this.renderLoader()
       case apiStatusConstants.success:
@@ -103,15 +124,22 @@ class Home extends Component {
 
   renderSearchedVideos = () => {
     const SearchIconAdjust = Styled(AiOutlineSearch)`
-    width:50px;`
+      width:50px;`
 
     return (
-      <VideosContainer>
-        <SearchContainer>
-          <InputSearch type="search" placeholder="Search" />
-          <SearchIconAdjust onChange={this.onChangeInput} size={20} />
-        </SearchContainer>
-      </VideosContainer>
+      <ThemeContext.Consumer>
+        {value => {
+          const {isDark} = value
+          return (
+            <VideosContainer isDark={isDark}>
+              <SearchContainer>
+                <InputSearch type="search" placeholder="Search" />
+                <SearchIconAdjust onChange={this.onChangeInput} size={20} />
+              </SearchContainer>
+            </VideosContainer>
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 
@@ -128,7 +156,12 @@ class Home extends Component {
                 <HomeMainContainer>
                   <Sidebar />
                 </HomeMainContainer>
-                <Banner isDark={isDark} />
+                <BottomVideosContainer isDark={isDark}>
+                  <Banner isDark={isDark} />
+                  {this.renderSearchedVideos()}
+
+                  {this.renderHomeVideos()}
+                </BottomVideosContainer>
               </HomeContainer>
             </>
           )
