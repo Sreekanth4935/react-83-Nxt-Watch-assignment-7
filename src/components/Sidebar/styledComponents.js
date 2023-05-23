@@ -10,7 +10,7 @@ export const SidebarContainer = Styled.div`
 //   border: solid 2px green;
   height: 100vh;
   width: 100%;
-  max-width: 500px;
+  max-width: 250px;
   @media screen and (max-width: 768px) {
     display: none;
   }

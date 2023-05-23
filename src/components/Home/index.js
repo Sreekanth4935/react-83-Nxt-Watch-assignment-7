@@ -18,6 +18,12 @@ import {
   BottomVideosContainer,
   LoaderContainer,
   UlHomeVideos,
+  FailureImage,
+  FailureContainer,
+  FailureText,
+  FailureDescription,
+  RetryButton,
+  ButtonSearch,
 } from './styledComponents'
 
 const apiStatusConstants = {
@@ -45,6 +51,7 @@ class Home extends Component {
     const jwtToken = Cookies.get('jwt_token')
     const {inputSearchText} = this.state
     const apiUrl = `https://apis.ccbp.in/videos/all?search=${inputSearchText}`
+    console.log(apiUrl)
     const options = {
       method: 'GET',
       headers: {
@@ -70,6 +77,7 @@ class Home extends Component {
         apiStatus: apiStatusConstants.success,
         homeVideosData: videosData,
       })
+      console.log(videosData)
     } else {
       this.setState({
         apiStatus: apiStatusConstants.failure,
@@ -83,18 +91,65 @@ class Home extends Component {
     </LoaderContainer>
   )
 
+  RetryToDefaultVideos = () =>
+    this.setState({inputSearchText: ''}, this.getVideosApi)
+
+  renderNoVideosFound = () => (
+    <FailureContainer>
+      <FailureImage src="https://assets.ccbp.in/frontend/react-js/nxt-watch-no-search-results-img.png " />
+      <FailureText>No Search results found</FailureText>
+      <FailureDescription>
+        Try different key words or remove search filter
+      </FailureDescription>
+      <RetryButton onClick={this.RetryToDefaultVideos}>Retry</RetryButton>
+    </FailureContainer>
+  )
+
   renderSuccessView = () => (
     <ThemeContext.Consumer>
       {value => {
         const {isDark} = value
         const {homeVideosData} = this.state
-        console.log(homeVideosData)
         return (
-          <UlHomeVideos isDark={isDark}>
-            {homeVideosData.map(eachData => (
-              <HomeRouter eachData={eachData} key={eachData.id} />
-            ))}
-          </UlHomeVideos>
+          <>
+            {homeVideosData.length === 0 ? (
+              this.renderNoVideosFound()
+            ) : (
+              <UlHomeVideos isDark={isDark}>
+                {homeVideosData.map(eachData => (
+                  <HomeRouter eachData={eachData} key={eachData.id} />
+                ))}
+              </UlHomeVideos>
+            )}
+          </>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
+
+  RetryApiCall = () => {
+    this.getVideosApi()
+  }
+
+  renderFailureView = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDark} = value
+        const imageUrl = isDark
+          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+        return (
+          <FailureContainer>
+            <FailureImage src={imageUrl} alt="failure-img" />
+            <FailureText>Oops! Something Went Wrong </FailureText>
+            <FailureDescription>
+              We are having some trouble to complete your request. Please try
+              again.
+            </FailureDescription>
+            <RetryButton type="button" onClick={this.RetryApiCall}>
+              Retry
+            </RetryButton>
+          </FailureContainer>
         )
       }}
     </ThemeContext.Consumer>
@@ -102,9 +157,8 @@ class Home extends Component {
 
   renderHomeVideos = () => {
     const {apiStatus} = this.state
-    console.log(apiStatus)
 
-    switch ('SUCCESS') {
+    switch (apiStatus) {
       case apiStatusConstants.inProgress:
         return this.renderLoader()
       case apiStatusConstants.success:
@@ -122,6 +176,10 @@ class Home extends Component {
     })
   }
 
+  getSearchedInputVideos = () => {
+    this.getVideosApi()
+  }
+
   renderSearchedVideos = () => {
     const SearchIconAdjust = Styled(AiOutlineSearch)`
       width:50px;`
@@ -130,11 +188,22 @@ class Home extends Component {
       <ThemeContext.Consumer>
         {value => {
           const {isDark} = value
+          const {inputSearchText} = this.state
           return (
             <VideosContainer isDark={isDark}>
               <SearchContainer>
-                <InputSearch type="search" placeholder="Search" />
-                <SearchIconAdjust onChange={this.onChangeInput} size={20} />
+                <InputSearch
+                  type="search"
+                  placeholder="Search"
+                  value={inputSearchText}
+                  onChange={this.onChangeInput}
+                />
+                <ButtonSearch type="button" data-testid="searchButton">
+                  <SearchIconAdjust
+                    size={20}
+                    onClick={this.getSearchedInputVideos}
+                  />
+                </ButtonSearch>
               </SearchContainer>
             </VideosContainer>
           )

@@ -149,3 +149,46 @@ padding-left:10px;
 display: flex;
 flex-wrap: wrap;
 `
+
+export const FailureContainer = Styled.div`
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+min-height:70vh;
+`
+
+export const FailureImage = Styled.img`
+font-family:'Roboto';
+height:200px;
+`
+export const FailureText = Styled.h1`
+font-size :15px;
+font-family:"Roboto";
+`
+export const FailureDescription = Styled.p`
+color:#606060;
+text-align:center;
+font-family:"Roboto";
+`
+export const RetryButton = Styled.button`
+background-color:#4f46e5;
+padding:8px;
+width:100px;
+border-radius:3px;
+color:#ffffffff;
+border:0px;
+font-family:"Roboto";
+margin-top:10px;
+cursor:pointer;
+outline:none;
+`
+export const ButtonSearch = Styled.button`
+border:0px;
+`
+export const NoVideosContainer = Styled.div`
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+`
