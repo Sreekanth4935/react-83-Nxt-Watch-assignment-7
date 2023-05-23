@@ -1,7 +1,7 @@
 import Styled from 'styled-components'
 
 export const SidebarContainer = Styled.div`
-  background-color: ${props => (props.isDark ? '#000000' : '#ffffff')};
+  background-color: ${props => (props.isDark ? '#212121' : '#ffffff')};
   color: ${props => (props.isDark ? '#ffffff' : 'black')};
   font-family: 'Roboto';
   display: flex;
@@ -21,7 +21,6 @@ export const BottomAddress = Styled.div`
 `
 
 export const ContactHeading = Styled.h1`
-  
   font-family: 'Roboto';
   font-size: 18px;
  

@@ -12,6 +12,7 @@ import VideoItem from './components/VideoItem'
 class App extends Component {
   state = {
     isDark: false,
+    savedVideos: [],
   }
 
   onChangeTheme = () => {
@@ -20,14 +21,21 @@ class App extends Component {
     }))
   }
 
+  onChangeSavedVideos = (newVideo, change) =>
+    this.setState(prevState => ({
+      savedVideos: [...prevState.savedVideos, newVideo],
+    }))
+
   render() {
-    const {isDark} = this.state
+    const {isDark, savedVideos} = this.state
 
     return (
       <ThemeContext.Provider
         value={{
           isDark,
           onChangeTheme: this.onChangeTheme,
+          savedVideos,
+          onChangeSavedVideos: this.onChangeSavedVideos,
         }}
       >
         <Switch>

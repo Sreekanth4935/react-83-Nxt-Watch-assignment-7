@@ -4,7 +4,7 @@ import {GiHamburgerMenu} from 'react-icons/gi'
 
 export const NavContainer = Styled.nav`
 padding:10px;
-background-color:${props => (props.isDark ? '#000000' : '#ffffff')};
+background-color:${props => (props.isDark ? '#212121' : '#ffffff')};
 display:flex;
 flex-direction:row;
 justify-content:space-between;
@@ -24,7 +24,7 @@ align-items:center;
 `
 
 export const ThemeIconContainer = Styled.button`
-background-color : ${props => (props.isDark ? '#000000' : '#ffffff')};
+background-color : ${props => (props.isDark ? '#212121' : '#ffffff')};
 border:0px;
 margin-right:20px;
 `
