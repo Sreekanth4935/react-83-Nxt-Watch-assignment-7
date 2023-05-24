@@ -25,6 +25,11 @@ import {
   ChannelDetailsContainer,
   ChannelImage,
   ChannelDescription,
+  FailureContainer,
+  FailureImage,
+  FailureText,
+  FailureDescription,
+  RetryButton,
 } from './styledComponents'
 
 import './index.css'
@@ -98,18 +103,109 @@ class VideoItem extends Component {
     </LoaderContainer>
   )
 
-  renderSuccessView = () => {
-    const {videoDetails} = this.state
-    // const {videoUrl} = videoDetails
-    return (
-      <ReactPlayer
-        url={videoDetails.videoUrl}
-        controls
-        width="100%"
-        height="60vh"
-      />
-    )
-  }
+  renderSuccessView = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {onChangeSavedVideos} = value
+        const {
+          videoDetails,
+          isSaved,
+          isAvailable,
+          isLiked,
+          isDisliked,
+        } = this.state
+
+        const onCallSavedVideos = () => {
+          onChangeSavedVideos(videoDetails)
+          this.setState(prevState => ({
+            isSaved: !prevState.isSaved,
+          }))
+        }
+
+        return (
+          <>
+            <ReactPlayer
+              url={videoDetails.videoUrl}
+              controls
+              width="100%"
+              height="60vh"
+            />
+            <VideoTitle>{videoDetails.title}</VideoTitle>
+            <ViewsContainer>
+              <TimeContainer>
+                <Views>{videoDetails.viewCount} views</Views>
+                {isAvailable && this.getDate()}
+              </TimeContainer>
+              <LikesContainer>
+                <ButtonsContainer>
+                  <ButtonsLiked
+                    type="button"
+                    className={isLiked ? 'liked' : ''}
+                    onClick={this.likeButtonClicked}
+                  >
+                    <BiLike /> Like
+                  </ButtonsLiked>
+                  <ButtonsLiked
+                    type="button"
+                    className={isDisliked ? 'liked' : ''}
+                    onClick={this.disLikedButtonClicked}
+                  >
+                    <BiDislike />
+                    Dislike
+                  </ButtonsLiked>
+                  <ButtonsLiked
+                    type="button"
+                    onClick={onCallSavedVideos}
+                    className={isSaved ? 'liked' : ''}
+                  >
+                    <MdPlaylistAdd />
+                    {isSaved ? 'Saved' : 'Save'}
+                  </ButtonsLiked>
+                </ButtonsContainer>
+              </LikesContainer>
+            </ViewsContainer>
+            <hr />
+            <ChannelDetailsContainer>
+              <div>
+                <ChannelImage src={videoDetails.profileImageUrl} />
+              </div>
+              <div>
+                <p>{videoDetails.channelName}</p>
+                <p>{videoDetails.subscriberCount} subscribers</p>
+              </div>
+            </ChannelDetailsContainer>
+            <ChannelDescription>{videoDetails.description}</ChannelDescription>
+          </>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
+
+  RetryApiCall = () => this.fetchVideoData()
+
+  renderFailureView = () => (
+    <ThemeContext.Consumer>
+      {value => {
+        const {isDark} = value
+        const imageUrl = isDark
+          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+        return (
+          <FailureContainer isDark={isDark}>
+            <FailureImage src={imageUrl} alt="failure-img" />
+            <FailureText>Oops! Something Went Wrong </FailureText>
+            <FailureDescription>
+              We are having some trouble to complete your request. Please try
+              again.
+            </FailureDescription>
+            <RetryButton type="button" onClick={this.RetryApiCall}>
+              Retry
+            </RetryButton>
+          </FailureContainer>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
 
   renderVideo = () => {
     const {apiStatus} = this.state
@@ -146,22 +242,14 @@ class VideoItem extends Component {
     }))
   }
 
-  onClickSavedButton = () => (
-    <ThemeContext.Consumer>
-      {value => {
-        const {isDark} = value
-        return <h1>hi</h1>
-      }}
-    </ThemeContext.Consumer>
-  )
+  onClickSavedButton = () => {}
 
   render() {
-    const {videoDetails, isAvailable, isLiked, isDisliked, isSaved} = this.state
-
     return (
       <ThemeContext.Consumer>
         {value => {
           const {isDark} = value
+
           return (
             <>
               <Header />
@@ -171,52 +259,6 @@ class VideoItem extends Component {
                 </HomeMainContainer>
                 <VideoDetailsContainer>
                   {this.renderVideo()}
-                  <VideoTitle>{videoDetails.title}</VideoTitle>
-                  <ViewsContainer>
-                    <TimeContainer>
-                      <Views>{videoDetails.viewCount}</Views>
-                      {isAvailable && this.getDate()}
-                    </TimeContainer>
-                    <LikesContainer>
-                      <ButtonsContainer>
-                        <ButtonsLiked
-                          type="button"
-                          className={isLiked ? 'liked' : ''}
-                          onClick={this.likeButtonClicked}
-                        >
-                          <BiLike /> Like
-                        </ButtonsLiked>
-                        <ButtonsLiked
-                          type="button"
-                          className={isDisliked ? 'liked' : ''}
-                          onClick={this.disLikedButtonClicked}
-                        >
-                          <BiDislike />
-                          Dislike
-                        </ButtonsLiked>
-                        <ButtonsLiked
-                          type="button"
-                          onClicked={this.onClickSavedButton}
-                        >
-                          <MdPlaylistAdd />
-                          Save
-                        </ButtonsLiked>
-                      </ButtonsContainer>
-                    </LikesContainer>
-                  </ViewsContainer>
-                  <hr />
-                  <ChannelDetailsContainer>
-                    <div>
-                      <ChannelImage src={videoDetails.profileImageUrl} />
-                    </div>
-                    <div>
-                      <p>{videoDetails.channelName}</p>
-                      <p>{videoDetails.subscriberCount}</p>
-                    </div>
-                  </ChannelDetailsContainer>
-                  <ChannelDescription>
-                    {videoDetails.description}
-                  </ChannelDescription>
                 </VideoDetailsContainer>
               </HomeContainer>
             </>

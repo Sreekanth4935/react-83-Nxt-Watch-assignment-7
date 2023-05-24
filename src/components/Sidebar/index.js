@@ -22,18 +22,18 @@ const buttons = [
   {
     id: 'Trending',
     icon: <AiFillHome size={18} />,
-    route: '/videos/trending',
+    route: '/trending',
   },
 
   {
     id: 'Gaming',
     icon: <RiGameLine size={18} />,
-    route: 'videos/gaming',
+    route: '/gaming',
   },
   {
     id: 'Saved Videos',
     icon: <RiSaveLine size={18} />,
-    route: 'videos/saved-videos',
+    route: '/saved-videos',
   },
 ]
 

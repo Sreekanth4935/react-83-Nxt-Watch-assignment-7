@@ -6,6 +6,7 @@ import Home from './components/Home'
 import ThemeContext from './context/ThemeContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import VideoItem from './components/VideoItem'
+import TrendingRoute from './components/TrendingRoute'
 
 // Replace your code here
 
@@ -21,7 +22,7 @@ class App extends Component {
     }))
   }
 
-  onChangeSavedVideos = (newVideo, change) =>
+  onChangeSavedVideos = newVideo =>
     this.setState(prevState => ({
       savedVideos: [...prevState.savedVideos, newVideo],
     }))
@@ -42,6 +43,7 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <ProtectedRoute exact path="/" component={Home} />
           <ProtectedRoute exact path="/videos/:id" component={VideoItem} />
+          <ProtectedRoute exact path="/trending" component={TrendingRoute} />
         </Switch>
       </ThemeContext.Provider>
     )

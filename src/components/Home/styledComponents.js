@@ -26,8 +26,8 @@ export const HomeMainContainer = Styled.div`
 display:flex;
 flex-direction:column;
 // width:100%;
-
 `
+
 export const BannerImage = Styled.div`
 // width:100%;
 // height:100px;

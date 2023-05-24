@@ -27,7 +27,7 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-margin-left:250px;
+
 `
 export const VideoTitle = Styled.h1`
 padding:10px;
@@ -93,4 +93,43 @@ export const ChannelDescription = Styled.p`
 font-family:'Roboto';
 padding-left:10px;
 
+`
+// extracted
+
+export const FailureContainer = Styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color:${props => (props.isDark ? '#000000' : '#ffffff')};
+`
+
+export const FailureImage = Styled.img`
+  font-family: 'Roboto';
+  height: 200px;
+`
+
+export const FailureText = Styled.h1`
+  font-size: 15px;
+  font-family: 'Roboto';
+`
+
+export const FailureDescription = Styled.p`
+  color: #606060;
+  text-align: center;
+  font-family: 'Roboto';
+`
+
+export const RetryButton = Styled.button`
+  background-color: #4f46e5;
+  padding: 8px;
+  width: 100px;
+  border-radius: 3px;
+  color: #ffffffff;
+  border: 0px;
+  font-family: 'Roboto';
+  margin-top: 10px;
+  cursor: pointer;
+  outline: none;
 `
