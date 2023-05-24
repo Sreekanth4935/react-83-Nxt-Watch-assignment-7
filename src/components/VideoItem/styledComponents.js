@@ -21,14 +21,6 @@ width:100%;
 overflow-y: auto;
 `
 
-export const LoaderContainer = Styled.div`
-min-height:80vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-
-`
 export const VideoTitle = Styled.h1`
 padding:10px;
 font-size:13px;
@@ -132,4 +124,12 @@ export const RetryButton = Styled.button`
   margin-top: 10px;
   cursor: pointer;
   outline: none;
+`
+
+export const LoaderContainer = Styled.div`
+min-height:80vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 `
