@@ -1,10 +1,12 @@
 import {Component} from 'react'
+import {formatDistanceToNow} from 'date-fns'
 import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 import {HiFire} from 'react-icons/hi'
 import Header from '../Header'
 import {
+  RenderVideosContainer,
   HomeContainer,
   HomeMainContainer,
   BottomVideosContainer,
@@ -18,9 +20,17 @@ import {
   RetryButton,
   TrendingImage,
   TrendingVideoContainer,
+  ChannelLogo,
+  TrendingImageContainer,
+  ChannelDetailsContainer,
+  VideoTitle,
+  ChannelDetailsContainerAll,
+  DistanceContainer,
+  Count,
 } from './styledComponent'
 import Sidebar from '../Sidebar'
 import ThemeContext from '../../context/ThemeContext'
+import './index.css'
 
 const apiStatusConstants = {
   initial: 'INITIAL',
@@ -64,10 +74,11 @@ class TrendingRoute extends Component {
         channel: {
           name: eachVideo.channel.name,
           profileImageUrl: eachVideo.channel.profile_image_url,
-          viewCount: eachVideo.view_count,
-          publishedAt: eachVideo.published_at,
         },
+        viewCount: eachVideo.view_count,
+        publishedAt: eachVideo.published_at,
       }))
+
       this.setState({
         apiStatus: apiStatusConstants.success,
         trendingVideosData: updatedData,
@@ -94,11 +105,34 @@ class TrendingRoute extends Component {
           <>
             {trendingVideosData.map(eachVideo => {
               console.log(eachVideo)
+              const getDate = () => {
+                const parsedDate = new Date(eachVideo.publishedAt)
+                const distance = formatDistanceToNow(parsedDate)
+                return <p>{distance}</p>
+              }
               return (
                 <>
-                  <Link to={`/videos/${eachVideo.id}`}>
+                  <Link to={`/videos/${eachVideo.id}`} className="link">
                     <TrendingVideoContainer>
-                      <TrendingImage src={eachVideo.thumbnailUrl} alt="" />
+                      <TrendingImageContainer>
+                        <TrendingImage src={eachVideo.thumbnailUrl} alt="" />
+                      </TrendingImageContainer>
+                      <ChannelDetailsContainer isDark={isDark}>
+                        <ChannelLogo
+                          src={eachVideo.channel.profileImageUrl}
+                          alt=""
+                        />
+                        <div>
+                          <VideoTitle>{eachVideo.title}</VideoTitle>
+                          <ChannelDetailsContainerAll>
+                            <p>{eachVideo.channel.name}</p>
+                            <DistanceContainer>
+                              <Count>{eachVideo.viewCount} views</Count>
+                              {getDate()}
+                            </DistanceContainer>
+                          </ChannelDetailsContainerAll>
+                        </div>
+                      </ChannelDetailsContainer>
                     </TrendingVideoContainer>
                   </Link>
                 </>
@@ -165,7 +199,9 @@ class TrendingRoute extends Component {
                     <HiFire size={25} />
                     <TrendingHeading isDark={isDark}>Trending</TrendingHeading>
                   </TrendingContainer>
-                  {this.renderTrendingVideo()}
+                  <RenderVideosContainer>
+                    {this.renderTrendingVideo()}
+                  </RenderVideosContainer>
                 </BottomVideosContainer>
               </HomeContainer>
             </>

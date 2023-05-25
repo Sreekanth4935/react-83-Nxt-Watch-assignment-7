@@ -60,6 +60,7 @@ font-family:'Roboto';
 `
 
 export const ButtonsLiked = Styled.button`
+color:${props => (props.isDark ? '#ffffff' : '#000000')};
 display:flex;
 flex-direction:row;
 align-items:center;
@@ -68,6 +69,7 @@ font-size:15px;
 margin-right:10px;
 background-color:transparent;
 border:0px;
+color:${props => (props.isDark ? '#ffffff' : '#000000')};
 `
 export const ButtonsContainer = Styled.div`
 display:flex;

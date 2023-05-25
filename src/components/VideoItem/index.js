@@ -106,7 +106,7 @@ class VideoItem extends Component {
   renderSuccessView = () => (
     <ThemeContext.Consumer>
       {value => {
-        const {onChangeSavedVideos} = value
+        const {onChangeSavedVideos, isDark} = value
         const {
           videoDetails,
           isSaved,
@@ -139,6 +139,7 @@ class VideoItem extends Component {
               <LikesContainer>
                 <ButtonsContainer>
                   <ButtonsLiked
+                    isDark={isDark}
                     type="button"
                     className={isLiked ? 'liked' : ''}
                     onClick={this.likeButtonClicked}
@@ -146,6 +147,8 @@ class VideoItem extends Component {
                     <BiLike /> Like
                   </ButtonsLiked>
                   <ButtonsLiked
+                    isDark={isDark}
+                    isLiked={isLiked}
                     type="button"
                     className={isDisliked ? 'liked' : ''}
                     onClick={this.disLikedButtonClicked}
@@ -154,6 +157,7 @@ class VideoItem extends Component {
                     Dislike
                   </ButtonsLiked>
                   <ButtonsLiked
+                    isDark={isDark}
                     type="button"
                     onClick={onCallSavedVideos}
                     className={isSaved ? 'liked' : ''}
