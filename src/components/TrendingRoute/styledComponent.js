@@ -5,7 +5,7 @@ font-family:'Roboto';
 display:flex;
 flex-direction:row;
 background-color:${props => (props.isDark ? '#000000' : '#ffffff')};
-border:solid 2px red;
+// border:solid 2px red;
 `
 export const middle = Styled.div`
 font-family:'Roboto';
@@ -45,7 +45,7 @@ color : ${props => (props.isDark ? '#ffffff' : '#000000')};
 export const RenderVideosContainer = Styled.div`
 display:flex;
 flex-direction:column;
-border: solid 20px violet;
+// border: solid 20px violet;
 `
 
 export const FailureContainer = Styled.div`
@@ -98,7 +98,7 @@ align-items:center;
 export const TrendingVideoContainer = Styled.div`
 display:flex;
 flex-direction:column;
-border:solid 3px green;
+// border:solid 3px green;
 @media screen and (min-width:768px){
     flex-direction:row;
     width:95%;
@@ -110,7 +110,7 @@ border:solid 3px green;
 `
 export const TrendingImageContainer = Styled.div`
 @media screen and (min-width:768px){
-    border:solid 2px yellow;
+    // border:solid 2px yellow;
     margin-right:10px;
     border-radius:5px;
 }

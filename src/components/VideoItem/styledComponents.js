@@ -6,7 +6,7 @@ display:flex;
 flex-direction:row;
 background-color:${props => (props.isDark ? '#212121' : '#ebebeb')};
 color:${props => (props.isDark ? '#ffffff' : '#000000')};
-border:solid 2px red;
+// border:solid 2px red;
 height:100vh;
 width:100%;
 
@@ -70,7 +70,14 @@ margin-right:10px;
 background-color:transparent;
 border:0px;
 color:${props => (props.isDark ? '#ffffff' : '#000000')};
+color:${props => (props.isLiked ? 'green' : '')};
+color:${props => (props.isDisliked ? 'green' : '')};
+color:${props => (props.isSaved ? 'green' : '')};
+font-weight:${props => (props.isLiked ? '600' : '')};
+font-weight:${props => (props.isDisliked ? '600' : '')};
+font-weight:${props => (props.isSaved ? 600 : '')}
 `
+
 export const ButtonsContainer = Styled.div`
 display:flex;
 `

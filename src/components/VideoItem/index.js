@@ -139,6 +139,7 @@ class VideoItem extends Component {
               <LikesContainer>
                 <ButtonsContainer>
                   <ButtonsLiked
+                    isLiked={isLiked}
                     isDark={isDark}
                     type="button"
                     className={isLiked ? 'liked' : ''}
@@ -147,8 +148,8 @@ class VideoItem extends Component {
                     <BiLike /> Like
                   </ButtonsLiked>
                   <ButtonsLiked
+                    isDisliked={isDisliked}
                     isDark={isDark}
-                    isLiked={isLiked}
                     type="button"
                     className={isDisliked ? 'liked' : ''}
                     onClick={this.disLikedButtonClicked}
@@ -158,6 +159,7 @@ class VideoItem extends Component {
                   </ButtonsLiked>
                   <ButtonsLiked
                     isDark={isDark}
+                    isSaved={isSaved}
                     type="button"
                     onClick={onCallSavedVideos}
                     className={isSaved ? 'liked' : ''}

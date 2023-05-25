@@ -1,37 +1,30 @@
 import {Component} from 'react'
-import {formatDistanceToNow} from 'date-fns'
 import {Link} from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-import {HiFire} from 'react-icons/hi'
+import {SiYoutubegaming} from 'react-icons/si'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
+import ThemeContext from '../../context/ThemeContext'
+import './index.css'
 import {
-  RenderVideosContainer,
   HomeContainer,
   HomeMainContainer,
   BottomVideosContainer,
   TrendingContainer,
   TrendingHeading,
+  RenderVideosContainer,
   LoaderContainer,
   FailureContainer,
   FailureImage,
   FailureText,
   FailureDescription,
   RetryButton,
-  TrendingImage,
-  TrendingVideoContainer,
-  ChannelLogo,
-  TrendingImageContainer,
-  ChannelDetailsContainer,
-  VideoTitle,
-  ChannelDetailsContainerAll,
-  DistanceContainer,
-  Count,
-} from './styledComponent'
-
-import ThemeContext from '../../context/ThemeContext'
-import './index.css'
+  ListItemContainer,
+  GamingImage,
+  GamingVideoTitle,
+  GamingVideoViews,
+} from './styledComponents'
 
 const apiStatusConstants = {
   initial: 'INITIAL',
@@ -40,49 +33,44 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-class TrendingRoute extends Component {
+class GamingRoute extends Component {
   state = {
-    trendingVideosData: [],
-    apiStatus: '',
+    apiStatus: apiStatusConstants.initial,
+    gamingVideosData: [],
   }
 
   componentDidMount() {
-    this.getTrendingApiVideos()
+    this.getGamingVideos()
   }
 
-  getTrendingApiVideos = async () => {
+  getGamingVideos = async () => {
     this.setState({
       apiStatus: apiStatusConstants.inProgress,
     })
+
     const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = 'https://apis.ccbp.in/videos/trending'
+    const apiUrl = 'https://apis.ccbp.in/videos/gaming'
     const options = {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
     }
-
     const response = await fetch(apiUrl, options)
     // console.log(response)
-    if (response.ok) {
+    if (response.ok === true) {
       const data = await response.json()
       //   console.log(data)
       const updatedData = data.videos.map(eachVideo => ({
         id: eachVideo.id,
         title: eachVideo.title,
         thumbnailUrl: eachVideo.thumbnail_url,
-        channel: {
-          name: eachVideo.channel.name,
-          profileImageUrl: eachVideo.channel.profile_image_url,
-        },
         viewCount: eachVideo.view_count,
-        publishedAt: eachVideo.published_at,
       }))
-
+      //   console.log(updatedData)
       this.setState({
         apiStatus: apiStatusConstants.success,
-        trendingVideosData: updatedData,
+        gamingVideosData: updatedData,
       })
     } else {
       this.setState({
@@ -92,49 +80,32 @@ class TrendingRoute extends Component {
   }
 
   renderLoader = () => (
-    <LoaderContainer data-testid="loader">
-      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
-    </LoaderContainer>
+    <div className="loader-container">
+      <LoaderContainer data-testid="loader">
+        <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
+      </LoaderContainer>
+    </div>
   )
 
   renderSuccessView = () => (
     <ThemeContext.Consumer>
       {value => {
         const {isDark} = value
-        const {trendingVideosData} = this.state
+        const {gamingVideosData} = this.state
         return (
           <>
-            {trendingVideosData.map(eachVideo => {
+            {gamingVideosData.map(eachVideo => {
               console.log(eachVideo)
-              const getDate = () => {
-                const parsedDate = new Date(eachVideo.publishedAt)
-                const distance = formatDistanceToNow(parsedDate)
-                return <p>{distance}</p>
-              }
               return (
                 <>
                   <Link to={`/videos/${eachVideo.id}`} className="link">
-                    <TrendingVideoContainer>
-                      <TrendingImageContainer>
-                        <TrendingImage src={eachVideo.thumbnailUrl} alt="" />
-                      </TrendingImageContainer>
-                      <ChannelDetailsContainer isDark={isDark}>
-                        <ChannelLogo
-                          src={eachVideo.channel.profileImageUrl}
-                          alt=""
-                        />
-                        <div>
-                          <VideoTitle>{eachVideo.title}</VideoTitle>
-                          <ChannelDetailsContainerAll>
-                            <p>{eachVideo.channel.name}</p>
-                            <DistanceContainer>
-                              <Count>{eachVideo.viewCount} views</Count>
-                              {getDate()}
-                            </DistanceContainer>
-                          </ChannelDetailsContainerAll>
-                        </div>
-                      </ChannelDetailsContainer>
-                    </TrendingVideoContainer>
+                    <ListItemContainer isDark={isDark}>
+                      <GamingImage src={eachVideo.thumbnailUrl} alt="gaming" />
+                      <GamingVideoTitle>{eachVideo.title}</GamingVideoTitle>
+                      <GamingVideoViews>
+                        {eachVideo.viewCount} Watching Worldwide
+                      </GamingVideoViews>
+                    </ListItemContainer>
                   </Link>
                 </>
               )
@@ -145,7 +116,9 @@ class TrendingRoute extends Component {
     </ThemeContext.Consumer>
   )
 
-  RetryApiCall = () => this.getTrendingApiVideos()
+  RetryApiCall = () => {
+    this.getGamingVideos()
+  }
 
   renderFailureView = () => (
     <ThemeContext.Consumer>
@@ -172,7 +145,7 @@ class TrendingRoute extends Component {
     </ThemeContext.Consumer>
   )
 
-  renderTrendingVideo = () => {
+  renderGamingVideo = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusConstants.inProgress:
@@ -200,11 +173,11 @@ class TrendingRoute extends Component {
                 </HomeMainContainer>
                 <BottomVideosContainer isDark={isDark}>
                   <TrendingContainer isDark={isDark}>
-                    <HiFire size={25} />
-                    <TrendingHeading isDark={isDark}>Trending</TrendingHeading>
+                    <SiYoutubegaming size={25} />
+                    <TrendingHeading isDark={isDark}>Gaming</TrendingHeading>
                   </TrendingContainer>
                   <RenderVideosContainer>
-                    {this.renderTrendingVideo()}
+                    {this.renderGamingVideo()}
                   </RenderVideosContainer>
                 </BottomVideosContainer>
               </HomeContainer>
@@ -216,4 +189,4 @@ class TrendingRoute extends Component {
   }
 }
 
-export default TrendingRoute
+export default GamingRoute
