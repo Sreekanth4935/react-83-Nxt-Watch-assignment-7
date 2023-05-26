@@ -131,6 +131,7 @@ export const BottomVideosContainer = Styled.div`
 `
 export const HomeVideosUlContainer = Styled.div`
 list-style-type :none;
+font-family:'Roboto';
 padding:10px;
 `
 export const LoaderContainer = Styled.div`
