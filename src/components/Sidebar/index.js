@@ -38,20 +38,11 @@ const buttons = [
 ]
 
 class Sidebar extends Component {
-  state = {
-    activeButton: buttons[0].id,
-  }
-
-  changeActiveButton = id => {
-    this.setState({activeButton: id})
-  }
-
   render() {
-    const {activeButton} = this.state
     return (
       <ThemeContext.Consumer>
         {value => {
-          const {isDark} = value
+          const {isDark, sideButtonActiveId} = value
           return (
             <SidebarContainer isDark={isDark}>
               <ul className="ul-container">
@@ -59,7 +50,7 @@ class Sidebar extends Component {
                   <DisplayButtons
                     eachButton={eachButton}
                     key={eachButton.id}
-                    isActive={eachButton.id === activeButton}
+                    isActive={eachButton.id === sideButtonActiveId}
                     changeActiveButton={this.changeActiveButton}
                   />
                 ))}

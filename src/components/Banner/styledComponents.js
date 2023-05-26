@@ -44,7 +44,7 @@ export const BannerContainer = Styled.div`
 display:flex;
 flex-direction:column;
 width:100%;
-border:solid 1px green;
+// border:solid 1px green;
 background-color:#ffffff;
 `
 

@@ -7,7 +7,7 @@ flex-direction:row;
 // justify-content:center;
 // align-items:center;
 background-color:${props => (props.isDark ? '#000000' : '#ffffff')};
-border:solid 2px red;
+// border:solid 2px red;
 `
 export const SidebarContainer = Styled.div`
 font-family:'Roboto';
@@ -123,7 +123,7 @@ export const BottomVideosContainer = Styled.div`
   height: 100vh;
   background-size: cover;
   width: 100%;
-  padding-top: 10px;
+//   padding-top: 10px;
   overflow-y: scroll;
   color : ${props => (props.isDark ? '#ffffff' : '#000000')};
   background-color:${props => (props.isDark ? '#000000' : '#ebebeb')};

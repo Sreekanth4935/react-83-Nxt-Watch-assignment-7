@@ -106,7 +106,7 @@ class VideoItem extends Component {
   renderSuccessView = () => (
     <ThemeContext.Consumer>
       {value => {
-        const {onChangeSavedVideos, isDark} = value
+        const {onChangeSavedVideos, isDark, onChangeRemoveSavedVideo} = value
         const {
           videoDetails,
           isSaved,
@@ -115,11 +115,19 @@ class VideoItem extends Component {
           isDisliked,
         } = this.state
 
-        const onCallSavedVideos = () => {
-          onChangeSavedVideos(videoDetails)
-          this.setState(prevState => ({
-            isSaved: !prevState.isSaved,
-          }))
+        const onCallSavedVideos = newSaved => {
+          this.setState(
+            prevState => ({
+              isSaved: !prevState.isSaved,
+            }),
+            () => {
+              if (!isSaved) {
+                onChangeSavedVideos({...videoDetails, isSaved: newSaved})
+              } else {
+                onChangeRemoveSavedVideo(videoDetails)
+              }
+            },
+          )
         }
 
         return (
@@ -161,7 +169,7 @@ class VideoItem extends Component {
                     isDark={isDark}
                     isSaved={isSaved}
                     type="button"
-                    onClick={onCallSavedVideos}
+                    onClick={() => onCallSavedVideos(isSaved)}
                     className={isSaved ? 'liked' : ''}
                   >
                     <MdPlaylistAdd />

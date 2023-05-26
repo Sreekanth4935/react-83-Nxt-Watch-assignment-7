@@ -4,7 +4,6 @@ import Cookies from 'js-cookie'
 import Styled from 'styled-components'
 import {AiOutlineSearch} from 'react-icons/ai'
 import HomeRouter from '../HomeRouter'
-
 import ThemeContext from '../../context/ThemeContext'
 import Header from '../Header'
 import Sidebar from '../Sidebar'

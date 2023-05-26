@@ -4,24 +4,24 @@ import ThemeContext from '../../context/ThemeContext'
 import './index.css'
 
 const DisplayButtons = props => {
-  const {eachButton, isActive, changeActiveButton} = props
+  const {eachButton} = props
   const {id, icon, route} = eachButton
   // route
-  const changeActiveBtn = () => {
-    changeActiveButton(id)
-  }
 
   return (
     <ThemeContext.Consumer>
       {value => {
-        const {isDark} = value
+        const {isDark, changeActiveButton, sideButtonActiveId} = value
+        const onChangeActiveButton = () => {
+          changeActiveButton(id)
+        }
         return (
           <SidebarContainer>
             <Link to={route} className="link-item">
               <SideBarButton
                 type="button"
-                isActive={isActive}
-                onClick={changeActiveBtn}
+                isActive={id === sideButtonActiveId}
+                onClick={onChangeActiveButton}
                 isDark={isDark}
               >
                 {icon}
