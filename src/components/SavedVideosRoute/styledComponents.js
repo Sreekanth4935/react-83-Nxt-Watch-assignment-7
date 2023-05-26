@@ -67,7 +67,6 @@ flex-direction:column;
 justify-content:center;
 text-align:center;
 `
-// askldf
 
 export const TrendingVideoContainer = Styled.div`
   display: flex;
