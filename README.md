@@ -4,6 +4,8 @@ In this assignment let's build an **Nxt Watch** by applying the concepts we have
 
 **Success View** <br/>
 
+https://github.com/Sreekanth4935/react-83-Nxt-Watch-assignment-7/assets/37910008/f55829e3-ef0c-45c8-91a6-0c7695f8bb77
+
 <div style="text-align: center;">
      <video style="max-width:80%;box-shadow:0 2.8px 2.2px rgba(0, 0, 0, 0.12);outline:none;" loop="true" autoplay="autoplay" controls="controls" muted>
     <source src="https://assets.ccbp.in/frontend/content/react-js/nxt-watch-output.mp4" type="video/mp4">
@@ -12,6 +14,8 @@ In this assignment let's build an **Nxt Watch** by applying the concepts we have
 <br/>
 
 **Failure View** <br/>
+
+https://github.com/Sreekanth4935/react-83-Nxt-Watch-assignment-7/assets/37910008/74d3ac24-2f91-4a9a-942f-912b4cef8e5e
 
 <div style="text-align: center;">
     <video style="max-width:80%;box-shadow:0 2.8px 2.2px rgba(0, 0, 0, 0.12);outline:none;" loop="true" autoplay="autoplay" controls="controls" muted>
